@@ -61,8 +61,10 @@ const setEndDate = (endDate) => ({
     endDate
 });
 
+const expensesReducerDefaultState = [];
+
 // Expenses Reducer
-const expensesReducer = (state = [], action) => {
+const expensesReducer = (state = expensesReducerDefaultState, action) => {
     switch (action.type) {
         case 'ADD_EXPENSE':
             return [
