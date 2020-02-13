@@ -22,10 +22,10 @@ const ExpenseListFilters = (props) => (
                 console.log(e.target.value)
             }}
         >
-            <option value="date" selected={props.filters.sortBy === 'date' ? "selected" : null}>
+            <option value="date">
                 Date
             </option>
-            <option value="amount" selected={props.filters.sortBy === 'amount' ? "selected" : null}>
+            <option value="amount">
                 Amount
             </option>
         </select>
