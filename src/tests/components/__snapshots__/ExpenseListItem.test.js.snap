@@ -11,7 +11,7 @@ exports[`Should render ExpenseListItem with expenses 1`] = `
     </h3>
   </Link>
   <p>
-    ₱1.95
+    $1.95
     -
     Jan 1st, 1970
     u
