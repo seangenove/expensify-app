@@ -23,15 +23,20 @@ database.ref().set({
         city: 'Baguio City',
         country: 'Philippines'
     }
+}).then(() => {
+    console.log('Data is saved!')
+}).catch((error) => {
+    console.log('This failed.');
 });
 
-database.ref('age').set(27);
-database.ref('location/city').set('asdasd');
+// database.ref('age').set(27);
+// database.ref('location/city').set('asdasd');
 
 database.ref('attributes').set({
     height: 123,
     weight: 123
+}).then(() => {
+    console.log('Data is saved.');
+}).catch((e) => {
+    console.log(e);
 });
-
-
-
