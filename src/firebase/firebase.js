@@ -15,17 +15,78 @@ firebase.initializeApp(firebaseConfig);
 
 const database = firebase.database();
 
-database.ref().on('value', (snapshot) => {
-    const val = snapshot.val()
-    
-    console.log(`${val.name} is a ${val.job.title} at ${val.job.company} `);
-}, (e) => {
-    console.log('Error with data fetching.', e)
+// child_removed
+database.ref('expenses').on('child_removed', (snapshot) => {
+    console.log(snapshot.key, snapshot.val());
 });
 
-setTimeout(() => {
-    database.ref('job/company').set('Nokia');
-}, 5000); 
+// child_changed
+database.ref('expenses').on('child_changed', (snapshot) => {
+    console.log(snapshot.key, snapshot.val());
+});
+
+// child_added
+database.ref('expenses').on('child_added', (snapshot) => {
+    console.log(snapshot.key, snapshot.val());
+})
+
+// database.ref('expenses')
+//     .on('value', (snapshot) => {
+//         const expenses = [];
+
+//         snapshot.forEach((childSnapshot) => {
+//             expenses.push({
+//                 id: childSnapshot.key,
+//                 ...childSnapshot.val()
+//             });
+//         });
+
+//         console.log(expenses);
+//     })
+
+// setTimeout(() => {
+//     database.ref('expenses').push({
+//         description: 'Expense 4',
+//         note: 'Note 4',
+//         amount: 123,
+//         createdAt: ''
+//     });
+// }, 5000)
+
+// database.ref('expenses').push({
+//     description: 'Expense 1',
+//     note: 'Note 1',
+//     amount: 123,
+//     createdAt: '' 
+// });
+
+// database.ref('expenses').push({
+//     description: 'Expense 2',
+//     note: 'qweqwe',
+//     amount: 900,
+//     createdAt: '' 
+// });
+
+// database.ref('expenses').push({
+//     description: 'Expense 3',
+//     note: 'rwewe',
+//     amount: 10000,
+//     createdAt: '' 
+// });
+
+// database.ref('notes/-M1PWQHnf1id_vsS6BFL').remove();
+
+// database.ref().on('value', (snapshot) => {
+//     const val = snapshot.val()
+
+//     console.log(`${val.name} is a ${val.job.title} at ${val.job.company} `);
+// }, (e) => {
+//     console.log('Error with data fetching.', e)
+// });
+
+// setTimeout(() => {
+//     database.ref('job/company').set('Google');
+// }, 5000); 
 
 // database.ref('location/city')
 //     .once('value')
