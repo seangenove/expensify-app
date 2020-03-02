@@ -15,28 +15,56 @@ firebase.initializeApp(firebaseConfig);
 
 const database = firebase.database();
 
-database.ref().set({
-    name: 'Sean Genove',
-    age: 26,
-    isSingle: false,
-    location: {
-        city: 'Baguio City',
-        country: 'Philippines'
-    }
-}).then(() => {
-    console.log('Data is saved!')
-}).catch((error) => {
-    console.log('This failed.');
+database.ref().on('value', (snapshot) => {
+    const val = snapshot.val()
+    
+    console.log(`${val.name} is a ${val.job.title} at ${val.job.company} `);
+}, (e) => {
+    console.log('Error with data fetching.', e)
 });
 
-// database.ref('age').set(27);
-// database.ref('location/city').set('asdasd');
+setTimeout(() => {
+    database.ref('job/company').set('Nokia');
+}, 5000); 
 
-database.ref('attributes').set({
-    height: 123,
-    weight: 123
-}).then(() => {
-    console.log('Data is saved.');
-}).catch((e) => {
-    console.log(e);
-});
+// database.ref('location/city')
+//     .once('value')
+//     .then((snapshot) => {
+//         const val = snapshot.val()
+//         console.log(val)
+//     })
+//     .catch((error) => {
+//         console.log(error)
+//     })
+
+// database.ref().set({
+//     name: 'Sean Genove',
+//     age: 26,
+//     stressLevel: 6, 
+//     job: {
+//         title: 'Software Developer',
+//         company: 'Google'
+//     },
+//     isSingle: false,
+//     location: {
+//         city: 'Baguio City',
+//         country: 'Philippines'
+//     }
+// }).then(() => {
+//     console.log('Data is saved!')
+// }).catch((error) => {
+//     console.log('This failed.');
+// });
+
+// database.ref().update({
+//     stressLevel: 9,
+//     'job/company': 'Amazon',
+//     'location/city': 'Seattle'
+// });
+
+// database.ref('isSingle').remove()
+// .then(() => {
+//     console.log("Success!");
+// }).catch((error) => {
+//     console.log("Failed", error);
+// })
