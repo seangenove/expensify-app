@@ -2,22 +2,23 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import { startAddExpense, addExpense, editExpense, removeExpense } from './../../actions/expenses';
 import expenses from './../fixtures/expenses';
+import database from './../../firebase/firebase';
 
 // describe("long asynchronous specs", function() {
- 
+
 //     var originalTimeout;
- 
+
 //     beforeEach(function() {
 //         originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
 //         jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 //     });
- 
+
 //     it("takes a long time", function(done) {
 //         setTimeout(function() {
 //             done();
 //         }, 20000);
 //     });
- 
+
 //     afterEach(function() {
 //         jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
 //     });
@@ -55,9 +56,9 @@ test('Should setup add expense action object with provided values', () => {
 });
 
 // NOTE
-// For some reason, this test case does not work when connected to company network
+// For some reason, test cases labelled as ASYNC does not work when connected to a company network
 // This passes but when company network is used it seems like  asynchronous callback is being blocked
-test('Should setup add expense to database and store', (done) => {
+test('ASYNC: Should setup add expense to database and store', (done) => {
     const store = createMockStore({});
     const expenseData = {
         description: 'mouse',
@@ -67,26 +68,44 @@ test('Should setup add expense to database and store', (done) => {
     };
 
     store.dispatch(startAddExpense(expenseData)).then(() => {
-        expect(2).toBe(2);
+        const actions = store.getActions();
+        expect(actions[0]).toEqual({
+            type: 'ADD_EXPENSE',
+            expense: {
+                id: expect.any(String),
+                ...expenseData
+            }
+        });
+
+        return database.ref(`expenses/${actions[0].expense.id}`).once('value');
+    }).then((snapshot) => {
+        expect(snapshot.val()).toEqual(expenseData);
         done();
-    })
+    });
 });
 
-// test('Should setup add expense with defaults to database and store', () => {
+test('ASYNC: Should setup add expense with defaults to database and store', (done) => {
+    const store = createMockStore({});
+    const defaultExpenseData = {
+        description: '',
+        note: '',
+        amount: 0,
+        createdAt: 0
+    };
 
-// });
+    store.dispatch(startAddExpense()).then(() => {
+        const actions = store.getActions();
+        expect(actions[0]).toEqual({
+            type: 'ADD_EXPENSE',
+            expense: {
+                id: expect.any(String),
+                ...defaultExpenseData
+            }
+        });
 
-// test('Should setup add expense action object with default values', () => {
-//     const action = addExpense();
-
-//     expect(action).toEqual({
-//         type: 'ADD_EXPENSE',
-//         expense: {
-//             id: expect.any(String),
-//             description: '',
-//             note: '',
-//             amount: 0,
-//             createdAt: 0
-//         }
-//     })
-// });
+        return database.ref(`expenses/${actions[0].expense.id}`).once('value');
+    }).then((snapshot) => {
+        expect(snapshot.val()).toEqual(defaultExpenseData);
+        done();
+    });
+});
