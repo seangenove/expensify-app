@@ -3,3 +3,4 @@
 /.vscode
 /yarn-error.log
 public/dist/
+.env*
