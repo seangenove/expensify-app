@@ -1,30 +1,20 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import { startAddExpense, addExpense, editExpense, removeExpense } from './../../actions/expenses';
+import { startAddExpense, addExpense, editExpense, removeExpense, setExpenses, startSetExpenses } from './../../actions/expenses';
 import expenses from './../fixtures/expenses';
 import database from './../../firebase/firebase';
 
-// describe("long asynchronous specs", function() {
-
-//     var originalTimeout;
-
-//     beforeEach(function() {
-//         originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
-//         jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
-//     });
-
-//     it("takes a long time", function(done) {
-//         setTimeout(function() {
-//             done();
-//         }, 20000);
-//     });
-
-//     afterEach(function() {
-//         jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
-//     });
-// });
-
 const createMockStore = configureMockStore([thunk]);
+
+beforeEach((done) => {
+    const expensesData = {};
+
+    expenses.forEach(({ id, description, note, amount, createdAt }) => {
+        expensesData[id] = { description, note, amount, createdAt }
+    });
+
+    database.ref('expenses').set(expensesData).then(() => done());
+});
 
 test('Should setup remove expense action object', () => {
     const action = removeExpense({ id: '123abc' });
@@ -56,8 +46,7 @@ test('Should setup add expense action object with provided values', () => {
 });
 
 // NOTE
-// For some reason, test cases labelled as ASYNC does not work when connected to a company network
-// This passes but when company network is used it seems like  asynchronous callback is being blocked
+// If connected to a company network, set HTTP_PROXY and HTTPS_PROXY accordingly (may put in .bashrc to automatically set for every session)
 test('ASYNC: Should setup add expense to database and store', (done) => {
     const store = createMockStore({});
     const expenseData = {
@@ -109,3 +98,27 @@ test('ASYNC: Should setup add expense with defaults to database and store', (don
         done();
     });
 });
+
+test('should setup set expense action object with data', () => {
+    const action = setExpenses(expenses);
+
+    expect(action).toEqual({
+        type: 'SET_EXPENSES',
+        expenses
+    })
+});
+
+test('should fetch expenses from firbase', (done) => {
+    const store = createMockStore({});
+
+    store.dispatch(startSetExpenses()).then(() => {
+        const actions = store.getActions();
+
+        expect(actions[0]).toEqual({
+            type: 'SET_EXPENSES',
+            expenses
+        })
+
+        done();
+    });
+})

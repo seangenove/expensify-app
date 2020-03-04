@@ -14,7 +14,6 @@ exports[`Should render ExpenseListItem with expenses 1`] = `
     $1.95
     -
     Jan 1st, 1970
-    u
   </p>
 </div>
 `;
