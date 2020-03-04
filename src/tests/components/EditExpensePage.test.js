@@ -7,16 +7,16 @@ import { EditExpensePage } from '../../components/EditExpensePage';
 // Expense test data needs to be used consistently with expense passed to EditExpensePage component
 // See line 21
 
-let editExpense, removeExpense, history, wrapper;
+let editExpense, startRemoveExpense, history, wrapper;
 
 beforeEach(() => {
     editExpense = jest.fn();
-    removeExpense = jest.fn();
+    startRemoveExpense = jest.fn();
     history = { push: jest.fn() }
     wrapper = shallow(
         <EditExpensePage
             editExpense={editExpense}
-            removeExpense={removeExpense}
+            startRemoveExpense={startRemoveExpense}
             history={history}
             expense={expenses[2]} // here
         />
@@ -38,5 +38,5 @@ test('Should handle editExpense', () => {
     wrapper.find('button').simulate('click');
 
     expect(history.push).toHaveBeenLastCalledWith('/');
-    expect(removeExpense).toHaveBeenLastCalledWith({ id: expenses[2].id });
+    expect(startRemoveExpense).toHaveBeenLastCalledWith({ id: expenses[2].id });
 });
