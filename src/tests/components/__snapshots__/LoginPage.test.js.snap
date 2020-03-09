@@ -12,6 +12,11 @@ exports[`Should render LoginPage 1`] = `
     >
       Expensify
     </h1>
+    <p
+      className="box-layout__sub-title"
+    >
+      by Sean Genove
+    </p>
     <p>
       It's time to get your expenses under control.
     </p>

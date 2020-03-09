@@ -17,6 +17,13 @@
 }
 
 .box-layout__title {
-    margin: 0 0 $m-size 0;
+    margin: 0 0 $xs-size 0;
     line-height: 1;
+}
+.box-layout__sub-title {
+    color: lighten($grey, 20%);
+    line-height: 1;
+    margin: 0 0 $m-size 0;
+    font-size: $s-size;
+    
 }
