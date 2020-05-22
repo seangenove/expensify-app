@@ -1,4 +1,4 @@
-# Expensify App
+# expensify-app
 
 Expensify App is a simple expense tracker developed using React.js, Redux integrated with Firebase and Google Auth.
 
